@@ -43,10 +43,36 @@ const updateExpense = async (req, res) => {
   }
   res.json({ message: "Expense updated successfully" });
 };
+const getExpenseByCategory = async (req, res, next) => {
+  const { id } = req.params;
+  const result = await ExpenseModel.getExpenseByCategory(id);
+  if (!result) {
+    res.status(404).json({ message: "the expense not found" });
+  }
+  res.json({ data: result });
+};
+const getExpenseByDate = async (req, res, next) => {
+  const { date } = req.query;
+  const result = await ExpenseModel.getExpenseByDate(date);
+  if (!result) {
+    res.status(404).json({ message: "not found" });
+  }
+  res.json({ data: result });
+};
+const getTotalExpense = async (req, res, next) => {
+  const result = await ExpenseModel.getTotalExpense();
+  if (!result) {
+    res.status(404).json({ message: "not found" });
+  }
+  res.json(result);
+};
 
 module.exports = {
   getAllExpenses,
   getExpenseById,
   insertExpense,
   updateExpense,
+  getExpenseByCategory,
+  getExpenseByDate,
+  getTotalExpense,
 };

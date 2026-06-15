@@ -28,5 +28,24 @@ class ExpenseModel {
     );
     return response.affectedRows > 0;
   };
+  static getExpenseByCategory = async (categoryId) => {
+    const [result] = await pool.query(
+      "SELECT * FROM Expense WHERE category_id = ?",
+      [categoryId],
+    );
+    return result;
+  };
+  static getExpenseByDate = async (date) => {
+    const [result] = await pool.query("select * from expense where date = ?", [
+      date,
+    ]);
+    return result;
+  };
+  static getTotalExpense = async () => {
+    const [result] = await pool.query(
+      "SELECT SUM(amount) AS total_expenses FROM Expense",
+    );
+    return result;
+  };
 }
 module.exports = ExpenseModel;
