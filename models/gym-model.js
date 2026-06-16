@@ -26,13 +26,10 @@ class GymModel {
     city,
     session_duration,
   ) => {
-    console.log("id: ", id);
-
     const [result] = await pool.query(
       "update gym set name = ?, phone = ?, address = ?, city = ?, session_duration = ? where id = ?",
       [name, phone, address, city, session_duration, id],
     );
-    console.log("model: ", result);
     return result;
   };
 }

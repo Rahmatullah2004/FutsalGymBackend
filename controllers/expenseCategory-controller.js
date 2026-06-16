@@ -17,6 +17,9 @@ const getExpenseCategoryById = async (req, res) => {
 };
 const createExpenseCategory = async (req, res) => {
   const { name } = req.body;
+  if (!name) {
+    return res.status(400).json({ message: "Name is required" });
+  }
   const result = await ExpenseCategoryModel.createExpenseCategory(name);
   if (!result) {
     return res.status(400).json({ message: "Expense category not created" });
@@ -28,6 +31,9 @@ const createExpenseCategory = async (req, res) => {
 const updateExpenseCategory = async (req, res) => {
   const { id } = req.params;
   const { name } = req.body;
+  if (!name) {
+    return res.status(400).json({ message: "Name is required" });
+  }
   const result = await ExpenseCategoryModel.updateExpenseCategory(id, name);
   if (!result) {
     return res.status(400).json({ message: "Expense category not updated" });

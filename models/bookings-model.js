@@ -48,8 +48,8 @@ class BookingsModel {
     return result;
   };
   static getFreeTimes = async (id, date) => {
-    const [result] = pool.query(
-      "select start_time, end_time from booking where field_id = ? and date = ? and status != 'cancelled",
+    const [result] = await pool.query(
+      "select start_time, end_time from booking where field_id = ? and date = ? and status != 'cancelled'",
       [id, date],
     );
     return result;

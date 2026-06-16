@@ -2,6 +2,9 @@ const TrainingEnrollmentModel = require("../models/trainingEnrollment-model");
 
 const insertTrainingEnrollment = async (req, res, next) => {
   const { player_id, session_id } = req.body;
+  if (!player_id || !session_id) {
+    return res.status(400).json({ message: "Missing required fields" });
+  }
   const result = await TrainingEnrollmentModel.insertTrainingEnrollment(
     player_id,
     session_id,

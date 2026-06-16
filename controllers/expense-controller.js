@@ -1,3 +1,4 @@
+const joi = require("joi");
 const ExpenseModel = require("../models/expense-model");
 
 const getAllExpenses = async (req, res) => {
@@ -17,6 +18,15 @@ const getExpenseById = async (req, res) => {
   res.json({ message: "Expense retrieved successfully", data: result });
 };
 const insertExpense = async (req, res) => {
+  const schema = {
+    categoryId: joi.number().required(),
+    amount: joi.number().required(),
+    date: joi.date().required(),
+    description: joi.string().min(3).required(),
+  };
+  const validData = joi.object(schema).validate(req.body);
+  if (validData.error)
+    return res.json({ data: validData.error.details[0].message });
   const { categoryId, amount, date, description } = req.body;
   const result = await ExpenseModel.insertExpense(
     categoryId,
@@ -29,6 +39,15 @@ const insertExpense = async (req, res) => {
     .json({ message: "Expense created successfully", data: { id: result } });
 };
 const updateExpense = async (req, res) => {
+  const schema = {
+    categoryId: joi.number().required(),
+    amount: joi.number().required(),
+    date: joi.date().required(),
+    description: joi.string().min(3).required(),
+  };
+  const validData = joi.object(schema).validate(req.body);
+  if (validData.error)
+    return res.json({ data: validData.error.details[0].message });
   const { id } = req.params;
   const { categoryId, amount, date, description } = req.body;
   const result = await ExpenseModel.updateExpense(

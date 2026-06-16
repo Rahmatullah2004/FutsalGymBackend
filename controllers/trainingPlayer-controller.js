@@ -2,6 +2,11 @@ const trainingPlayerModel = require("../models/trainingPlayer-model");
 
 const insertTrainingPlayer = async (req, res, next) => {
   const { name, phone } = req.body;
+  if (!name || !phone) {
+    return res
+      .status(400)
+      .json({ message: "Name and phone are required fields" });
+  }
   const result = await trainingPlayerModel.insertTrainingPlayer(name, phone);
   res.json({ message: "Training player inserted successfully", result });
 };
@@ -23,6 +28,11 @@ const getTrainingPlayerById = async (req, res, next) => {
 const updateTrainingPlayer = async (req, res, next) => {
   const { id } = req.params;
   const { name, phone } = req.body;
+  if (!name || !phone) {
+    return res
+      .status(400)
+      .json({ message: "Name and phone are required fields" });
+  }
   const result = await trainingPlayerModel.updateTrainingPlayer(
     id,
     name,

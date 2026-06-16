@@ -2,6 +2,9 @@ const PaymentsModel = require("../models/payments-model");
 
 const getAllPayments = async (req, res, next) => {
   const result = await PaymentsModel.getAllPayments();
+  if (result.length === 0) {
+    return res.status(404).json({ message: "No payments found" });
+  }
   res.json({ data: result });
 };
 const insertPayment = async (req, res, next) => {
@@ -28,20 +31,30 @@ const insertPayment = async (req, res, next) => {
   }
 };
 const getPaymentById = async (req, res, next) => {
-  const id = req.params.id;
+  const { id } = req.params;
+  console.log("id:", id);
   const [result] = await PaymentsModel.getPaymentById(id);
+  if (!result) {
+    return res.status(404).json({ message: "Payment not found" });
+  }
   res.json({ data: result });
 };
 const getPaymentByBooking = async (req, res, next) => {
   const booking_id = req.params.bookingId;
-  const [result] = await PaymentsModel.getPaymentById(booking_id);
+  console.log("booking_id:", booking_id);
+  const [result] = await PaymentsModel.getPaymentByBookingId(booking_id);
+  if (!result) {
+    return res
+      .status(404)
+      .json({ message: "Payment not found for this booking" });
+  }
   res.json({ data: result });
 };
 const getRemainingBalance = async (req, res, next) => {
   const bookingId = req.params.id;
   const booking = await PaymentsModel.getTotalPrice(bookingId);
   if (booking.length === 0) {
-    return res.status(404).json({ message: "Booking not found" });
+    return res.status(404).json({ message: "payment not found" });
   }
   const payments = await PaymentsModel.getPaidAmount(bookingId);
   const totalPrice = booking[0].total_price;

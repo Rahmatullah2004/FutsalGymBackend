@@ -56,8 +56,6 @@ const login = async (req, res, next) => {
 const edit = async (req, res, nex) => {
   const id = req.params.id;
   const data = req.body;
-  console.log("id: ", id);
-  console.log("data: ", data);
   async function editUsers(data) {
     const { username, password, role, name, phone, monthly_fee } = data;
     if (!username || !password || !role) {

@@ -29,10 +29,21 @@ const insertGym = async (req, res, nex) => {
 
 const getGym = async (req, res, nex) => {
   const result = await GymModel.getGym();
+  if (!result) return res.json({ data: "No gym found" });
   res.json({ data: result });
 };
 
 const updateGym = async (req, res, next) => {
+  const schema = {
+    name: joi.string().min(3).required(),
+    phone: joi.string().min(10).max(12).required(),
+    address: joi.string().min(3).required(),
+    city: joi.string().min(3).required(),
+    session_duration: joi.number().valid(60, 90).required(),
+  };
+  const validData = joi.object(schema).validate(req.body);
+  if (validData.error)
+    return res.json({ data: validData.error.details[0].message });
   const data = req.body;
   const id = req.params.id;
   const { name, phone, address, city, session_duration } = data;

@@ -20,10 +20,11 @@ class PaymentsModel {
     return result[0];
   };
   static getPaymentById = async (id) => {
+    console.log("result:");
     const result = await pool.query("select * from payment where id = ?", [id]);
     return result[0];
   };
-  static getPaymentById = async (booking_id) => {
+  static getPaymentByBookingId = async (booking_id) => {
     const result = await pool.query(
       "select * from payment where booking_id = ?",
       [booking_id],

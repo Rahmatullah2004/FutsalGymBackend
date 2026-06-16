@@ -5,6 +5,7 @@ const bookingsRouter = express.Router();
 
 bookingsRouter.get("/", bookingsController.getAllBookings);
 bookingsRouter.get("/date", bookingsController.getByDate);
+bookingsRouter.get("/freetimes/:id", bookingsController.getFreeTimes);
 bookingsRouter.get("/mybooking/:id", bookingsController.getMybooking);
 bookingsRouter.get("/:id", bookingsController.getById);
 bookingsRouter.post("/", bookingsController.insertBooking);

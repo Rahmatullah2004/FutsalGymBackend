@@ -1,7 +1,17 @@
 const { get, update } = require("lodash");
 const TrainingSessionModel = require("../models/trainingSession-model");
+const joi = require("joi");
 
 const insertTrainingSession = async (req, res, next) => {
+  const schema = {
+    teacher_id: joi.number().required(),
+    day_of_week: joi.string().max(150).required(),
+    start_time: joi.string().required(),
+    end_time: joi.string().required(),
+  };
+  const validData = joi.object(schema).validate(req.body);
+  if (validData.error)
+    return res.json({ data: validData.error.details[0].message });
   const { teacher_id, day_of_week, start_time, end_time } = req.body;
   const result = await TrainingSessionModel.insertTrainingSession(
     teacher_id,
@@ -16,6 +26,9 @@ const insertTrainingSession = async (req, res, next) => {
 };
 const getAllTrainingSession = async (req, res, next) => {
   const result = await TrainingSessionModel.getAllTrainingSession();
+  if (!result) {
+    return res.status(404).json({ message: "No training sessions found" });
+  }
   res.json({
     data: result,
   });
@@ -31,6 +44,15 @@ const getTrainingSessionById = async (req, res, next) => {
   });
 };
 const updateTrainingSessionById = async (req, res, next) => {
+  const schema = {
+    teacher_id: joi.number().required(),
+    day_of_week: joi.string().max(150).required(),
+    start_time: joi.string().required(),
+    end_time: joi.string().required(),
+  };
+  const validData = joi.object(schema).validate(req.body);
+  if (validData.error)
+    return res.json({ data: validData.error.details[0].message });
   const { id } = req.params;
   const { teacher_id, day_of_week, start_time, end_time } = req.body;
   const result = await TrainingSessionModel.updateTrainingSessionById(

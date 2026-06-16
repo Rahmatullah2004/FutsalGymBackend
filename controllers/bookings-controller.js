@@ -3,24 +3,24 @@ const joi = require("joi");
 
 const getAllBookings = async (req, res, nex) => {
   const result = await BookingsModel.getAllBookings();
-  console.log("all");
+  if (result.length == 0) return res.json({ data: "no bookings yet" });
   res.json({ data: result });
 };
 const getById = async (req, res, nex) => {
   const result = await BookingsModel.getById(req.params.id);
-  console.log("by id");
+  if (result.length == 0) return res.json({ data: "no booking with this id" });
   res.json({ data: result });
 };
 const getMybooking = async (req, res, nex) => {
   const result = await BookingsModel.getMybooking(req.params.id);
-  console.log("my booking");
+  if (result.length == 0) return res.json({ data: "no booking for this user" });
   res.json({ data: result });
 };
 const getByDate = async (req, res, nex) => {
   const { date } = req.query;
-  console.log("date---", date);
   const result = await BookingsModel.getByDate(date);
-  console.log(result);
+  if (result.length == 0)
+    return res.json({ data: "no bookings for this date" });
   res.json({ data: result });
 };
 const insertBooking = async (req, res, nex) => {
@@ -81,8 +81,10 @@ const changeStatus = async (req, res, next) => {
 
 const getFreeTimes = async (req, res, next) => {
   const { date } = req.query;
-  const result = BookingsModel.getFreeTimes(req.params.id, date);
-  console.log("free times: ", result);
+  const { id } = req.params;
+  const result = await BookingsModel.getFreeTimes(id, date);
+  if (result.length == 0)
+    return res.json({ data: "no free times for this date and field" });
   return res.json({ data: result });
 };
 
